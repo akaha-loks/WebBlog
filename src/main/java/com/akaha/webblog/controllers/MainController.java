@@ -1,4 +1,4 @@
-package com.akaha.webblog.controller;
+package com.akaha.webblog.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,5 +11,10 @@ public class MainController {
     public String home(Model model){
         model.addAttribute("title", "Главная страница");
         return "home";
+    }
+
+    @GetMapping("/about")
+    public String about(Model model){
+        return "about";
     }
 }
