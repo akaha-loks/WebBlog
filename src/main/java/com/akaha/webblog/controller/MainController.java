@@ -1,4 +1,4 @@
-package com.akaha.webblog.controllers;
+package com.akaha.webblog.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
