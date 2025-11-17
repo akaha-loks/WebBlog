@@ -25,4 +25,8 @@ public class PostService {
         }
         return postRepository.save(newPost);
     }
+
+    public Post postDetails(long postId){
+        return postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
+    }
 }
