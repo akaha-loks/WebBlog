@@ -10,13 +10,14 @@
 
 <div class="container mt-5">
     <h1>Блог сайта</h1>
-
     <div th:each="el : ${post}" class="alert alert-info mt-2">
         <h3 th:text="${el.title}"></h3>
         <p th:text="${el.full_text}"></p>
-        <p th:text="${el.views}"></p>
-        <a th:href="'/blog/' + ${el.id} + '/edit/'" class="btn btn-warning">Редактировать</a>
-        <a th:href="'/blog/' + ${el.id} + 'remove'" class="btn btn-warning">Удалить</a>
+        <p><b>Просмотры: </b> <span th:text="${el.views}"></span></p>
+        <a th:href="'/blog/' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>
+        <form th:action="'/blog/' + ${el.id} + '/remove'" method="post">
+            <button class="btn btn-warning" type="submit">Удалить</button>
+        </form>
     </div>
 </div>
 

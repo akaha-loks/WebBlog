@@ -23,12 +23,12 @@ public class BlogController {
     }
 
     @GetMapping("/blog/add")
-    public String blogAdd(Model model){
+    public String blogAdd(){
         return "blog-add";
     }
 
     @PostMapping("/blog/add")
-    public String blogPostAdd(@RequestParam String title, @RequestParam String anons, @RequestParam String full_text, Model model){
+    public String blogPostAdd(@RequestParam String title, @RequestParam String anons, @RequestParam String full_text){
         postService.addPost(title, anons, full_text);
         return "redirect:/blog";
     }
@@ -42,5 +42,23 @@ public class BlogController {
             System.err.println(e.getMessage());
             return "redirect:/blog";
         }
+    }
+
+    @GetMapping("/blog/{id}/edit")
+    public String blogEdit(@PathVariable(value = "id") long postId, Model model){
+        model.addAttribute("post", postService.postEdit(postId));
+        return "blog-edit";
+    }
+
+    @PostMapping("/blog/{id}/edit")
+    public String blogUpdate(@PathVariable(value = "id") long postId, @RequestParam String title, @RequestParam String anons, @RequestParam String full_text){
+        postService.postUpdate(postId, title, anons, full_text);
+        return "redirect:/blog";
+    }
+
+    @PostMapping("/blog/{id}/remove")
+    public String blogDelete(@PathVariable(value = "id") long postId){
+        postService.postDelete(postId);
+        return "redirect:/blog";
     }
 }

@@ -29,4 +29,29 @@ public class PostService {
     public Post postDetails(long postId){
         return postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
     }
+
+    public Post postEdit(long postId){
+        return postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
+    }
+
+    public Post postUpdate(long postId, String title, String anons, String full_text){
+        Post updatePost = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
+        if (updatePost.getTitle() == null || updatePost.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("Пустое название!");
+        }
+        if(updatePost.getFull_text() == null || updatePost.getFull_text().isEmpty()){
+            throw new IllegalArgumentException(updatePost.getTitle() + ": не может быть пустым");
+        }
+        updatePost.setTitle(title);
+        updatePost.setAnons(anons);
+        updatePost.setFull_text(full_text);
+        return postRepository.save(updatePost);
+    }
+
+    public Post postDelete(long postId){
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
+        postRepository.delete(post);
+
+        return post;
+    }
 }
