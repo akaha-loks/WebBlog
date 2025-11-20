@@ -11,47 +11,46 @@ public class PostService {
 
     public PostService(PostRepository postRepository) { this.postRepository = postRepository; }
 
-    public Iterable<Post> getPosts(){
+
+    public Iterable<Post> getAllPosts(){
         return postRepository.findAll();
     }
 
-    public Post addPost(String title, String anons, String full_text){
+    public void createPost(String title, String anons, String full_text){
         Post newPost = new Post(title, anons, full_text);
-        if (newPost.getTitle() == null || newPost.getTitle().isEmpty()) {
-            throw new IllegalArgumentException("Пустое название!");
-        }
-        if(newPost.getFull_text() == null || newPost.getFull_text().isEmpty()){
-            throw new IllegalArgumentException(newPost.getTitle() + ": не может быть пустым");
-        }
-        return postRepository.save(newPost);
+
+        validatePost(title, full_text);
+
+        postRepository.save(newPost);
     }
 
-    public Post postDetails(long postId){
+    public Post getPostById(long postId){
         return postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
     }
 
-    public Post postEdit(long postId){
-        return postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
-    }
-
-    public Post postUpdate(long postId, String title, String anons, String full_text){
+    public void updatePost(long postId, String title, String anons, String full_text){
         Post updatePost = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
-        if (updatePost.getTitle() == null || updatePost.getTitle().isEmpty()) {
-            throw new IllegalArgumentException("Пустое название!");
-        }
-        if(updatePost.getFull_text() == null || updatePost.getFull_text().isEmpty()){
-            throw new IllegalArgumentException(updatePost.getTitle() + ": не может быть пустым");
-        }
+
+        validatePost(title, full_text);
+
         updatePost.setTitle(title);
         updatePost.setAnons(anons);
         updatePost.setFull_text(full_text);
-        return postRepository.save(updatePost);
+        postRepository.save(updatePost);
     }
 
-    public Post postDelete(long postId){
+    public void deletePost(long postId){
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Пост с таким id не существует!"));
         postRepository.delete(post);
+    }
 
-        return post;
+
+    private void validatePost(String title, String full_text){
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException("Пустое название!");
+        }
+        if(full_text == null || full_text.isEmpty()){
+            throw new IllegalArgumentException("Содержимое статьи не может быть пустым");
+        }
     }
 }
